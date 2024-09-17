@@ -1,5 +1,8 @@
 # DiscordPlugin for CS2
 
+## Demo
+![Plugin Demo](https://i.imgur.com/RxMISAL.png)
+
 ## Overview
 
 The `DiscordPlugin` is a plugin for Counter-Strike 2 that allows players to receive an invite link to your Discord server through a chat command. This plugin is designed to be easy to configure and use, providing a straightforward way to promote your community server.
