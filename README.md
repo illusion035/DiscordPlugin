@@ -10,7 +10,7 @@ This plugin integrates Discord functionality into your CS2 server, allowing play
 
 ## Installation
 
-1. **Download**: Clone or download the repository to your server.
+1. **Download**: The last release in this page
 
 2. **Place the Plugin**: Copy the plugin files to your CS2 plugins directory.
 
