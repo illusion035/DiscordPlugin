@@ -28,6 +28,9 @@ namespace DiscordPlugin
         [JsonPropertyName("show_total_stats")]
         public bool ShowTotalStats { get; set; } = true;
 
+        [JsonPropertyName("cache_duration_seconds")]
+        public int CacheDurationSeconds { get; set; } = 60;
+
         [JsonPropertyName("ConfigVersion")]
         public override int Version { get; set; } = 1;
     }
@@ -74,6 +77,9 @@ namespace DiscordPlugin
 
         private static readonly string AssemblyName = typeof(DiscordPlugin).Assembly.GetName().Name ?? "";
         private static readonly string CfgPath = $"{Server.GameDirectory}/csgo/addons/counterstrikesharp/configs/plugins/{AssemblyName}/{AssemblyName}.json";
+
+        private (int totalMembers, int onlineMembers) _cachedCounts = (0, 0);
+        private DateTime _lastCacheUpdate = DateTime.MinValue;
 
         private void UpdateConfig<T>(T config) where T : BasePluginConfig, new()
         {
@@ -147,6 +153,17 @@ namespace DiscordPlugin
             }
         }
 
+        private async Task<(int totalMembers, int onlineMembers)> GetCachedDiscordMemberCountsAsync()
+        {
+            if ((DateTime.Now - _lastCacheUpdate).TotalSeconds > Config.CacheDurationSeconds)
+            {
+                var counts = await GetDiscordMemberCountsAsync();
+                _cachedCounts = counts;
+                _lastCacheUpdate = DateTime.Now;
+            }
+            return _cachedCounts;
+        }
+
         private HookResult OnDiscordCommand(CCSPlayerController? player, CommandInfo message)
         {
             if (player == null || !player.IsValid || player.IsBot)
@@ -163,7 +180,7 @@ namespace DiscordPlugin
 
             string discordMessage = ReplaceColorPlaceholders(Config.DiscordLink);
 
-            var (totalMembers, onlineMembers) = Task.Run(async () => await GetDiscordMemberCountsAsync()).Result;
+            var (totalMembers, onlineMembers) = Task.Run(async () => await GetCachedDiscordMemberCountsAsync()).Result;
 
             player.PrintToChat(discordMessage);
 
