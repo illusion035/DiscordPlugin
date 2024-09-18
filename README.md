@@ -6,11 +6,12 @@ This plugin integrates Discord functionality into your CS2 server, allowing play
 
 - **Discord Invite Link**: Displays invite link to your Discord server.
 - **Server Stats**: Optionally displays total and online member counts from your Discord server.
+- **Caching**: Implements caching to reduce server lag and improve performance. Cached server stats are updated every minute.
 - **Customizable**: Configurable via a JSON file for easy adjustments.
 
 ## Installation
 
-1. **Download**: The last release in this page
+1. **Download**: The latest release from this page.
 
 2. **Place the Plugin**: Copy the plugin files to your CS2 plugins directory.
 
@@ -35,6 +36,7 @@ Edit the `DiscordPlugin.json` file to configure the plugin. Here’s a breakdown
     "server_id": "your_server_id",
     "member_counts_message": "{purple}Total members: {total_members} {silver}| {green}Online members: {online_members}",
     "show_total_stats": true,
+    "cache_duration_seconds": 60, // Duration in seconds for caching server stats
     "ConfigVersion": 1
 }
 ```
